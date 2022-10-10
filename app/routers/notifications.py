@@ -2,7 +2,7 @@ import os
 from fastapi import APIRouter, status, Body
 from aiohttp import ClientSession
 from dotenv import load_dotenv
-from models import Notify
+from schemas import notifications
 
 load_dotenv()
 
@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 @router.post("/")
-async def send_norify(notify: Notify):
+async def send_norify(notify: notifications.Notify):
     async with ClientSession() as session:
         async with session.post(os.getenv("TELEGRAM_SEND_MESSAGE_URI"),
                                 data = {"chat_id": os.getenv("TELEGRAM_CHAT_ID") ,

@@ -1,6 +1,8 @@
 from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
-from routers import notify
+from routers import notifications, users, token
+from db import create_bd
+
 
 app = FastAPI()
 
@@ -15,9 +17,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(
+    token.router,
+    prefix="/token",
+    tags=["auth"],
+)
 
 app.include_router(
-    notify.router,
+    users.router,
+    prefix="/users",
+    tags=["users"]
+)
+
+app.include_router(
+    notifications.router,
     prefix="/notify",
     tags=["notify"],
 )
