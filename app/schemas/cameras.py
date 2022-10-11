@@ -1,6 +1,20 @@
 from pydantic import BaseModel
 
-class Camera(BaseModel):
+
+class BaseCamera(BaseModel):
+    title:str
+    description: str = None
+
+
+class Camera(BaseCamera):
     id: int
-    title: str
-    description: str
+
+    class Config:
+        orm_mode = True
+
+class CameraCreate(BaseCamera):
+    pass
+
+
+class CameraUpdate(BaseCamera):
+    pass

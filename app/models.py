@@ -1,4 +1,5 @@
 import datetime
+from email.policy import default
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Text, Table, DateTime
 from sqlalchemy.orm import relationship
 
@@ -44,4 +45,5 @@ class Article(Base):
     description = Column(String, nullable=False, default='')
     content = Column(Text, nullable=False, default='')
     created = Column(DateTime, default=datetime.datetime.utcnow)
+    is_published = Column(Boolean, default=False)
 

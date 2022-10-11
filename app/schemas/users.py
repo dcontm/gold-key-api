@@ -27,6 +27,3 @@ class UserUpdate(UserBase):
     is_active: bool
     temp_password: str
     camera: List[Camera] = []
-
-class UserSetPassword(User):
-    password: str
