@@ -37,7 +37,6 @@ def create_user(user:users.UserCreate,
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    #new_user = db.query(models.User).filter(models.User.username == user.username).first()
     return new_user
 
 @router.get("/me", response_model=users.User)

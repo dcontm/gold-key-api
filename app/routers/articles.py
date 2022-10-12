@@ -32,7 +32,6 @@ def create_article(article:articles.ArticleCreate,
     db.add(new_article)
     db.commit()
     db.refresh(new_article)
-    new_article = db.query(models.Article).filter(models.Article.title == article.title).first()
     return new_article
 
 @router.get("/{article_id}", response_model=articles.Article)
@@ -46,21 +45,11 @@ def get_article_by_id(article_id:int,
                             detail="Статья с данным id не найдена.")
     return db_article
 
-@router.get("/{article_id}", response_model=articles.Article)
-def get_article_by_title(article_title:str,
-                admin:users.User= Depends(get_superuser),
-                db:Session = Depends(get_db)
-                ):
-    db_article = db.query(models.Article).filter(models.Article.title == article_title).first()
-    if db_article is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
-                            detail="Статья с данным заголовком не найдена.")
-    return db_article
 
 @router.put("/{article_id}",response_model=articles.Article)
 def update_article(article_id:int, 
             article:articles.ArticleUpdate, 
-            admin:users.User= Depends(get_superuser), 
+            admin:users.User= Depends(get_superuser),
             db: Session = Depends(get_db)
             ):
     db_article = db.query(models.Article).filter(models.Article.id == article_id).first()
