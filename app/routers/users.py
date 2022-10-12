@@ -4,9 +4,10 @@ from dotenv import load_dotenv
 from sqlalchemy.orm import Session
 
 import models
-from schemas import users
+from schemas import users, cameras
 from db import get_db
 from auth import get_current_active_user, get_superuser, get_password_hash
+from utils import gen_password
 
 
 load_dotenv()
@@ -36,7 +37,7 @@ def create_user(user:users.UserCreate,
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    new_user = db.query(models.User).filter(models.User.username == user.username).first()
+    #new_user = db.query(models.User).filter(models.User.username == user.username).first()
     return new_user
 
 @router.get("/me", response_model=users.User)
@@ -79,13 +80,63 @@ def delete_user(user_id:int,
     db.commit()
     return f'Пользователь c id={user_id} успешно удален.'
 
-@router.post('/reset_password')
-def reset_password(password:str=Body(...),
+@router.post("/{user_id}/bind_camera",response_model=users.User)
+def update_user(user_id:int, 
+            camera_id: int = Body(...),
+            admin:users.User= Depends(get_superuser), 
+            db: Session = Depends(get_db)
+            ):
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not db_user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                        detail="Пользователь с данным id не найден")
+
+    camera = db.query(models.Camera).filter(models.Camera.id == camera_id).first()
+    if not camera:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                        detail=f"Нет камеры с id={camera_id}.")
+    db_user.camera.append(camera)
+    db.commit()
+    return db_user
+
+@router.post("/{user_id}/unbind_camera",response_model=users.User)
+def update_user(user_id:int, 
+            camera_id: int = Body(...),
+            admin:users.User= Depends(get_superuser), 
+            db: Session = Depends(get_db)
+            ):
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not db_user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                        detail="Пользователь с данным id не найден")
+
+    camera = db.query(models.Camera).filter(models.Camera.id == camera_id).first()
+    if not camera:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                        detail=f"Нет камеры с id={camera_id}.")
+    db_user.camera.remove(camera)
+    db.commit()
+    return db_user
+
+
+@router.post('/set_password')
+def set_password(password:str=Body(...),
                 db:Session = Depends(get_db),
                 current_user: users.User = Depends(get_current_active_user),
                 ):
     hashed_password = get_password_hash(password)
-    db.query(models.User).filter(models.User.id == current_user.id).update({'hashed_password': hashed_password})
+    current_user.hashed_password = hashed_password
     db.commit()
     return 'Новый пароль успешно установлен.'
+
+@router.post('/reset_password')
+def reset_password(db:Session = Depends(get_db),
+                current_user: users.User = Depends(get_current_active_user),
+                ):
+    current_user.hashed_password = None
+    current_user.temp_password = gen_password()
+    db.commit()
+    return 'Пароль успешно сброшен. Новый временный пароль вы сможете получить у администратора.'
+
+
 
