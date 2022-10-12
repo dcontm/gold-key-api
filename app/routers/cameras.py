@@ -32,7 +32,6 @@ def create_camera(camera:cameras.CameraCreate,
     db.add(new_camera)
     db.commit()
     db.refresh(new_camera)
-    new_camera = db.query(models.Camera).filter(models.Camera.title == camera.title).first()
     return new_camera
 
 @router.get("/{camera_id}", response_model=cameras.Camera)
