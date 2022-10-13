@@ -19,6 +19,7 @@ def get_articles(skip:int=0,
     articles = db.query(models.Article).offset(skip).limit(limit).all()
     return articles
 
+
 @router.post('/', response_model=articles.Article)
 def create_article(article:articles.ArticleCreate,
                 admin:users.User= Depends(get_superuser),

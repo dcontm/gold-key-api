@@ -1,6 +1,6 @@
 from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
-from routers import notifications, users, token, cameras, articles
+from routers import notifications, users, token, cameras, articles, news
 from db import create_bd
 
 
@@ -45,4 +45,10 @@ app.include_router(
     articles.router,
     prefix="/articles",
     tags=["articles"],
+)
+
+app.include_router(
+    news.router,
+    prefix="/news",
+    tags=["news"],
 )
