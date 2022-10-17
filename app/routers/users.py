@@ -125,6 +125,7 @@ def set_password(password:str=Body(...),
                 ):
     hashed_password = get_password_hash(password)
     current_user.hashed_password = hashed_password
+    current_user.const_password = True
     db.commit()
     return 'Новый пароль успешно установлен.'
 

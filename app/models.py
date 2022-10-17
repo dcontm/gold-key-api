@@ -27,6 +27,7 @@ class User(Base):
     temp_password = Column(String, default=gen_password)
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
+    const_password = Column(Boolean, default=False)
     camera = relationship("Camera", secondary=association_table)
 
 

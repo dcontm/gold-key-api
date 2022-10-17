@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Any, List, Union
 from pydantic import BaseModel
 from . cameras import Camera
 
@@ -7,6 +7,7 @@ class UserBase(BaseModel):
     username: str
     first_name: str
     second_name: str
+    const_password: bool = None
 
 
 class UserCreate(UserBase):
