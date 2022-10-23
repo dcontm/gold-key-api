@@ -4,7 +4,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-vk_session = vk_api.VkApi("+79854330111", "omgwtfrak22")
+login = os.environ.get("VK_LOGIN")
+password = os.environ.get("VK_PASSWORD")
+
+
+vk_session = vk_api.VkApi(login, password)
 vk_session.auth()
 
 api = vk_session.get_api()

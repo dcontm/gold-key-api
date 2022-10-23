@@ -7,11 +7,6 @@ class UserBase(BaseModel):
     username: str
     first_name: str
     second_name: str
-    const_password: bool = None
-
-
-class UserCreate(UserBase):
-    pass
 
 
 class User(UserBase):
@@ -20,11 +15,17 @@ class User(UserBase):
     is_superuser: bool
     temp_password: str
     camera: List[Camera] = []
+    const_password: bool
 
     class Config:
         orm_mode = True
 
+
+class UserCreate(UserBase):
+    pass
+
+
 class UserUpdate(UserBase):
     is_active: bool
+    is_superuser: bool
     temp_password: str
-    camera: List[Camera] = []
