@@ -1,8 +1,8 @@
-"""init
+"""empty message
 
-Revision ID: 81dacd8487f2
+Revision ID: 9358c499e73e
 Revises: 
-Create Date: 2022-10-11 23:03:50.892770
+Create Date: 2022-10-25 20:58:54.006655
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '81dacd8487f2'
+revision = '9358c499e73e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -46,6 +46,7 @@ def upgrade() -> None:
     sa.Column('temp_password', sa.String(), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=True),
     sa.Column('is_superuser', sa.Boolean(), nullable=True),
+    sa.Column('const_password', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_user_id'), 'user', ['id'], unique=False)
@@ -53,8 +54,8 @@ def upgrade() -> None:
     op.create_table('association',
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('camera_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['camera_id'], ['camera.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], )
+    sa.ForeignKeyConstraint(['camera_id'], ['camera.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE')
     )
     # ### end Alembic commands ###
 

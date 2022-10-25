@@ -9,6 +9,6 @@ password = os.environ.get("VK_PASSWORD")
 
 
 vk_session = vk_api.VkApi(login, password)
-vk_session.auth()
+#vk_session.auth()
 
-api = vk_session.get_api()
+#api = vk_session.get_api()
