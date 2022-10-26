@@ -29,6 +29,7 @@ multidict==6.0.2
 passlib==1.7.4
 pendulum==2.1.2
 pkg_resources==0.0.0
+psycopg2-binary==2.9.5
 pyasn1==0.4.8
 pycparser==2.21
 pydantic==1.10.2
