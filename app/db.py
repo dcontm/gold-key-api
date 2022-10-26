@@ -7,12 +7,13 @@ import os
 load_dotenv()
 
 
-SQLALCHEMY_DATABASE_URL = os.getenv("SQLALCHEMY_DATABASE_URL")
-# SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
+#SQLALCHEMY_DATABASE_URL = os.getenv("SQLALCHEMY_DATABASE_URL")
+POSTGRES_DATABASE_URL = os.getenv("POSTGRES_DATABASE_URL")
 
 # connect_args={"check_same_thread": False} remove if db not SQLite
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+    POSTGRES_DATABASE_URL
+    #SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
